@@ -17,6 +17,15 @@ app.get("/restaurant", (req, res) => {
   });
 });
 
+app.get("/starpoint", (req, res) => {
+  const sql =
+    "select v.id, round(avg(v.starpoint), 1) as starpoint from restaurant as r, review as v group by v.id";
+  conn.query(sql, (err, result) => {
+    if (err) console.log("에러에러삐익삐익", err);
+    else res.send(result);
+  });
+});
+
 app.get("/reservation", (req, res) => {
   const sql = "select * from reservation";
   conn.query(sql, (err, result) => {
@@ -38,7 +47,9 @@ app.post("/reservation", (req, res) => {
 });
 
 app.put("/starpoint", (req, res) => {
-  const sql = `update restaurant set starpoint=${req.body.starpoint} where id='${req.body.id}'`;
+  const sql = `insert into review values ('${v4()}', '${req.body.id}', ${
+    req.body.starpoint
+  })`;
   conn.query(sql, (err, result) => {
     if (err) console.log("삐익삐익에러발생", err);
     else res.send(result);

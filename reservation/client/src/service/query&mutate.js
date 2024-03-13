@@ -5,6 +5,7 @@ import {
   getReservation,
   deleteReservation,
   updateStarpoint,
+  getStarpoint,
 } from "./api";
 
 //이번엔 Query 와 Mutation 들을 붙여서~!!!
@@ -30,6 +31,17 @@ export const useGetReservationQuery = () => {
   return { reservationData: data, ...restQuery };
 };
 
+export const useGetStarpointQuery = () => {
+  const { data, ...restQuery } = useQuery({
+    queryKey: ["getStarpoint"],
+    queryFn: () => getStarpoint(),
+    refetchOnWindowFocus: false,
+    retry: false,
+  });
+
+  return { starpointData: data, ...restQuery };
+};
+
 export const usePostReservationMutation = (reservation) => {
   const queryClient = useQueryClient();
 
@@ -51,7 +63,7 @@ export const useUpdateStarpointMutation = (id, starpoint) => {
     mutationFn: () => updateStarpoint(id, starpoint),
     onSuccess: () => {
       alert("별점을 추가햇어요!!!");
-      queryClient.invalidateQueries(["getRestaurant"]);
+      queryClient.invalidateQueries(["getStarpoint"]);
     },
   });
 

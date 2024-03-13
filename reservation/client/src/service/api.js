@@ -13,6 +13,11 @@ export const getReservation = async () => {
   return { data };
 };
 
+export const getStarpoint = async () => {
+  const data = await instance.get("starpoint");
+  return { data };
+};
+
 export const postReservation = async (reservation) => {
   const data = await instance.post("reservation", reservation);
   return { data };

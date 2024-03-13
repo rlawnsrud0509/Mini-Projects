@@ -3,6 +3,7 @@ import {
   useDeleteReservationMutation,
   useGetReastaurantQuery,
   useGetReservationQuery,
+  useGetStarpointQuery,
   usePostReservationMutation,
   useUpdateStarpointMutation,
 } from "./service/query&mutate";
@@ -24,6 +25,7 @@ function App() {
 
   const { restaurantData } = useGetReastaurantQuery();
   const { reservationData } = useGetReservationQuery();
+  const { starpointData } = useGetStarpointQuery();
   const { postReservationMutate } =
     usePostReservationMutation(reservationFormdata);
   const { updateStarpointMutate } = useUpdateStarpointMutation(
@@ -38,25 +40,67 @@ function App() {
     <div className="w-[100vw] min-h-[100vh] bg-lime-100 text-white font-semibold flex flex-col items-center gap-20 p-10">
       <div className="flex gap-6">
         {restaurantData &&
-          restaurantData.data.data.map((e) => (
+          restaurantData.data.data.map((e, i) => (
             <div
               className={classNames(
                 "flex flex-col gap-2 items-center text-[1.25rem] w-[250px] h-[150px] border-[3px] border-black rounded-lg text-black justify-center transition-[ease-in-out_0.2s] hover:scale-[1.03]",
                 //증말 구현하고싶은 기능이잇는데 안떠올라서 4중 삼항연산자를 도입하겟다 껄껄껄
-                e.starpoint / 2 >= 75
-                  ? "bg-yellow-300"
-                  : e.starpoint / 2 >= 50
-                  ? "bg-yellow-200"
-                  : e.starpoint / 2 >= 25
-                  ? "bg-yellow-100"
-                  : e.starpoint / 2 >= 0
-                  ? "bg-yellow-50"
+                starpointData &&
+                  starpointData.data.data.filter(
+                    (element) => element.id === e.id
+                  ).length
+                  ? starpointData.data.data.filter(
+                      (element) => element.id === e.id
+                    )[0].starpoint /
+                      2 >=
+                    75
+                    ? "bg-yellow-300"
+                    : starpointData.data.data.filter(
+                        (element) => element.id === e.id
+                      ).length
+                    ? starpointData.data.data.filter(
+                        (element) => element.id === e.id
+                      )[0].starpoint /
+                        2 >=
+                      50
+                      ? "bg-yellow-200"
+                      : starpointData.data.data.filter(
+                          (element) => element.id === e.id
+                        ).length
+                      ? starpointData.data.data.filter(
+                          (element) => element.id === e.id
+                        )[0].starpoint /
+                          2 >=
+                        25
+                        ? "bg-yellow-100"
+                        : starpointData.data.data.filter(
+                            (element) => element.id === e.id
+                          ).length
+                        ? starpointData.data.data.filter(
+                            (element) => element.id === e.id
+                          )[0].starpoint /
+                            2 >=
+                          0
+                          ? "bg-yellow-50"
+                          : "bg-white"
+                        : "bg-white"
+                      : "bg-white"
+                    : "bg-white"
                   : "bg-white"
               )}
             >
               <div className="text-[1.25rem]"> {e.name}</div>
               <div className="text-[0.9rem]"> {e.address}</div>
-              <div className="text-[0.6rem]">별점 {e.starpoint}</div>
+              <div className="text-[0.6rem]">
+                별점{" "}
+                {starpointData &&
+                starpointData.data.data.filter((element) => element.id === e.id)
+                  .length
+                  ? starpointData.data.data.filter(
+                      (element) => element.id === e.id
+                    )[0].starpoint
+                  : 0}
+              </div>
               <div className="flex gap-4">
                 <div
                   onClick={() => {
@@ -148,6 +192,7 @@ function App() {
               className="outline-none text-black p-4 bg-slate-100 rounded-sm"
               placeholder="당신의 별점은~~!!!"
               type="text"
+              defaultValue={0}
               onChange={(e) => {
                 setStarpoint(+e.target.value);
               }}

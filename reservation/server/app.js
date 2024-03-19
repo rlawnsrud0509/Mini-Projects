@@ -1,13 +1,12 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const bodyParser = require("body-parser");
 const db = require("./mysql.js");
 const conn = db.init();
 const { v4 } = require("uuid");
 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.get("/restaurant", (req, res) => {
   const sql = "select * from restaurant";
